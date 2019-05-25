@@ -79,7 +79,7 @@ class Analyzer:
                 print("{0} -> {1}".format(x[0], x[1]))
 
         elif split_command[0] == "help":
-            with open("help.txt") as help_file:
+            with open("script/help.txt") as help_file:
                 print(help_file.read())
 
         elif split_command[0] == "quit":

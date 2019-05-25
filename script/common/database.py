@@ -8,7 +8,7 @@ from contextlib import closing
 from .api import get_csv_url_from_api
 
 
-db = sqlite3.connect('data/maturadb')
+db = sqlite3.connect('script/data/maturadb')
 cursor = db.cursor()
 url = get_csv_url_from_api()
 
