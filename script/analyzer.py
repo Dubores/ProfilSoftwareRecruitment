@@ -1,8 +1,8 @@
 from data_parser import DataParser
 
 class Analyzer:
-    def __init__(self, file_name):
-        self.parser = DataParser(file_name)
+    def __init__(self):
+        self.parser = DataParser()
 
     def command_dispatcher(self, command):
         #command parsing
@@ -71,8 +71,8 @@ class Analyzer:
         pass_list = []
         result_list = []
 
-        attend_list.extend(self.parser.get_rows(year=year, sex=sex, type="przystąpiło", province=province))
-        pass_list.extend(self.parser.get_rows(year=year, sex=sex, type="zdało", province=province))
+        attend_list.extend(self.parser.get_rows_from_db(year=year, sex=sex, type="przystąpiło", province=province))
+        pass_list.extend(self.parser.get_rows_from_db(year=year, sex=sex, type="zdało", province=province))
 
         if sex == None:
             attend_list = self.parser.merge_women_and_men(attend_list)
@@ -90,7 +90,7 @@ class Analyzer:
 
         #get all rows from particular years, province, and of particular sex(if specified)
         for x in range(2010, year + 1):
-            list.extend(self.parser.get_rows(year=x, sex=sex, type="przystąpiło", province=province))
+            list.extend(self.parser.get_rows_from_csv(year=x, sex=sex, type="przystąpiło", province=province))
         print(list)
 
         #sum number of people from all acquired rows
@@ -113,7 +113,6 @@ class Analyzer:
         result_list = []
         result_list.extend(self.pass_rate(year=int(year), sex=sex))
 
-        print(result_list)
         result_list.sort(key=lambda x: x[2], reverse=True)
 
         print("Province with the best pass rate in {0}: {1}".format(year, result_list[0][0]))
@@ -131,7 +130,6 @@ class Analyzer:
         for x in provinces_passrate_list:
             x.sort(key=lambda y: y[1])
 
-        print(provinces_passrate_list)
         for x in provinces_passrate_list:
             for y in range(0, 8):
                 if x[y][2] > x[y+1][2]:
