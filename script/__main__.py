@@ -1,5 +1,5 @@
-from analyzer import Analyzer
-from database import insert_data_into_db
+from .analyzer import Analyzer
+from .database import insert_data_into_db
 
 #not needed, getting data from API
 #file_name = "../dataset.csv"

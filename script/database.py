@@ -5,7 +5,7 @@ import urllib3
 import codecs
 import requests
 from contextlib import closing
-from api import get_csv_url_from_api
+from .api import get_csv_url_from_api
 
 
 db = sqlite3.connect('data/maturadb')

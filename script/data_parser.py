@@ -1,9 +1,9 @@
 import csv
 import requests
 import codecs
-from database import get_data_from_db
 from contextlib import closing
-from api import get_csv_url_from_api
+from .database import get_data_from_db
+from .api import get_csv_url_from_api
 
 class DataParser:
     def __init__(self):

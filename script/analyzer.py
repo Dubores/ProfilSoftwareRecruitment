@@ -1,4 +1,4 @@
-from data_parser import DataParser
+from .data_parser import DataParser
 
 class Analyzer:
     def __init__(self):
