@@ -41,13 +41,13 @@ class Analyzer:
             year = split_command[1]
             if len(split_command) == 3:
                 if split_command[2] == "-F":
-                    result_list = self.best_pass_rate_in_year(sex="kobiety", year=year)
+                    result = self.best_pass_rate_in_year(sex="kobiety", year=year)
                 elif split_command[2] == "-M":
-                    result_list = self.best_pass_rate_in_year(sex="mężczyźni", year=year)
+                    result = self.best_pass_rate_in_year(sex="mężczyźni", year=year)
             else:
-                result_list = self.best_pass_rate_in_year(year=year)
+                result = self.best_pass_rate_in_year(year=year)
 
-            print("Province with the best pass rate in {0}: {1}".format(year, result_list[0][0]))
+            print("Province with the best pass rate in {0}: {1}".format(year, result))
 
 
         elif split_command[0] == "regression":
@@ -135,7 +135,7 @@ class Analyzer:
         result_list.extend(self.pass_rate(year=int(year), sex=sex))
 
         result_list.sort(key=lambda x: x[2], reverse=True)
-        return result_list
+        return result_list[0][0]
 
 
     def regression_provinces(self, sex=None):
@@ -156,6 +156,7 @@ class Analyzer:
                 if x[y][2] > x[y+1][2]:
                     results_list.append([x[0][0], x[y][1], x[y+1][1]])
 
+        results_list.sort()
         return results_list
 
     def provinces_comparison(self, province1, province2, sex=None):
