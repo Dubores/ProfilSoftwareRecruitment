@@ -1,0 +1,13 @@
+Legend:
+<argument> - required argument
+
+Possible commands:
+avg <year> <province> - average number of people that have attended the exam from 2010 to <year> in <province>
+passrate <province> - percentage pass rate of a given <province> over the years
+bestinyear <year> - province with the best pass rate in given <year>
+regression - displays all provinces that have noted a worse pass rate in consecutive years
+compare <province1> <province2> - displays which province had a better pass rate in specific years
+
+Every command might get an optional parameter [-F] or [-M] at the end to filter only for female or male data.
+Example: passrate Pomorskie -F
+Above command displays percentage pass rate for Pomorskie province from 2010 to 2018 for female attendants.

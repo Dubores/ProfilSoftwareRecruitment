@@ -60,7 +60,11 @@ class Analyzer:
                 self.provinces_comparison(province1=province1, province2=province2)
 
         elif split_command[0] == "help":
-            print("help menu")
+            with open("help.txt") as help_file:
+                print(help_file.read())
+
+        elif split_command[0] == "quit":
+            pass
 
         else:
             print("Improper command. Type 'help' to display possible options.")
