@@ -1,7 +1,7 @@
 ﻿# ProfilSoftwareRecruitment
-##Zadanie rekrutacyjne na staż w Profil Software
+Zadanie rekrutacyjne na staż w Profil Software
 
-Jak postawić projekt:\
+##Jak postawić projekt:\
 Przejść w cmd do folderu repozytorium ("ProfilSoftwareRecruitment"), uruchomić skrypt poleceniem:\
 "python script"
 
