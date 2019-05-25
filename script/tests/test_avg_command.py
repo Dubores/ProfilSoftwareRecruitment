@@ -1,6 +1,8 @@
 import pytest
-from analyzer import Analyzer
+from ..common.analyzer import Analyzer
 
-def test_avg_output():
+@pytest.mark.parametrize('year, province, sex, expected', [(2012, "Pomorskie", "kobiety", 10979)])
+def test_avg_output(year, province, sex, expected):
     analyzer = Analyzer()
-    assert analyzer.average_till_year(year=2012, province="Pomorskie", sex="kobiety") == 10979
+    assert analyzer.average_till_year(year=year, province=province, sex=sex) == pytest.approx(expected, abs=1)
+

@@ -11,53 +11,72 @@ class Analyzer:
         if split_command[0] == "avg":
             year = int(split_command[1])
             province = split_command[2]
+
             if len(split_command) == 4:
                 if split_command[3] == "-F":
-                    self.average_till_year(year, sex="kobiety", province=province)
+                    average = self.average_till_year(year, sex="kobiety", province=province)
                 elif split_command[3] == "-M":
-                    self.average_till_year(year, sex="mężczyźni", province=province)
+                    average = self.average_till_year(year, sex="mężczyźni", province=province)
             else:
-                self.average_till_year(year, province=province)
+                average = self.average_till_year(year, province=province)
+
+            print("Average number of people per year who attended Matura exam from 2010 to {0} in {1}: {2}".format(year, province, average))
+
 
         elif split_command[0] == "passrate":
             province = split_command[1]
             if len(split_command) == 3:
                 if split_command[2] == "-F":
-                    self.pass_rate_percentage_all_years(sex="kobiety", province=province)
+                    result_list = self.pass_rate_percentage_all_years(sex="kobiety", province=province)
                 elif split_command[2] == "-M":
-                    self.pass_rate_percentage_all_years(sex="mężczyźni", province=province)
+                    result_list = self.pass_rate_percentage_all_years(sex="mężczyźni", province=province)
             else:
-                self.pass_rate_percentage_all_years(province=province)
+                result_list = self.pass_rate_percentage_all_years(province=province)
+
+            for x in range(2010, 2019):
+                print("Pass rate for {0} in year {1}: {2:.1%}".format(province, x, result_list[x - 2010][2]))
+
 
         elif split_command[0] == "bestinyear":
             year = split_command[1]
             if len(split_command) == 3:
                 if split_command[2] == "-F":
-                    self.best_pass_rate_in_year(sex="kobiety", year=year)
+                    result_list = self.best_pass_rate_in_year(sex="kobiety", year=year)
                 elif split_command[2] == "-M":
-                    self.best_pass_rate_in_year(sex="mężczyźni", year=year)
+                    result_list = self.best_pass_rate_in_year(sex="mężczyźni", year=year)
             else:
-                self.best_pass_rate_in_year(year=year)
+                result_list = self.best_pass_rate_in_year(year=year)
+
+            print("Province with the best pass rate in {0}: {1}".format(year, result_list[0][0]))
+
 
         elif split_command[0] == "regression":
             if (len(split_command)) == 2:
                 if split_command[1] == "-F":
-                    self.regression_provinces(sex="kobiety")
+                    results_list = self.regression_provinces(sex="kobiety")
                 elif split_command[1] == "-M":
-                    self.regression_provinces(sex="mężczyźni")
+                    results_list = self.regression_provinces(sex="mężczyźni")
             else:
-                self.regression_provinces()
+                results_list = self.regression_provinces()
+
+            print("Provinces that noted a regression in consecutive years:")
+            for x in results_list:
+                print("{0}: {1} -> {2}".format(x[0], x[1], x[2]))
 
         elif split_command[0] == "compare":
             province1 = split_command[1]
             province2 = split_command[2]
             if (len(split_command)) == 4:
                 if split_command[3] == "-F":
-                    self.provinces_comparison(province1=province1, province2=province2, sex="kobiety")
+                    result_list = self.provinces_comparison(province1=province1, province2=province2, sex="kobiety")
                 elif split_command[3] == "-M":
-                    self.provinces_comparison(province1=province1, province2=province2, sex="mężczyźni")
+                    result_list = self.provinces_comparison(province1=province1, province2=province2, sex="mężczyźni")
             else:
-                self.provinces_comparison(province1=province1, province2=province2)
+                result_list = self.provinces_comparison(province1=province1, province2=province2)
+
+            print("Comparison of pass rate in provinces {0} and {1} over the years:".format(province1, province2))
+            for x in result_list:
+                print("{0} -> {1}".format(x[0], x[1]))
 
         elif split_command[0] == "help":
             with open("help.txt") as help_file:
@@ -95,14 +114,13 @@ class Analyzer:
         #get all rows from particular years, province, and of particular sex(if specified)
         for x in range(2010, year + 1):
             list.extend(self.parser.get_rows_from_csv(year=x, sex=sex, type="przystąpiło", province=province))
-        print(list)
 
         #sum number of people from all acquired rows
         for x in list:
             sum = sum + int(x[4])
 
         average = sum/no_years
-        print("Average number of people per year who attended Matura exam from 2010 to {0} in {1}: {2}".format(year, province, average))
+        return average
 
     def pass_rate_percentage_all_years(self, sex=None, province=None):
         result_list = []
@@ -110,16 +128,15 @@ class Analyzer:
         for x in range(2010, 2019):
             result_list.extend(self.pass_rate(sex=sex, province=province, year=x))
 
-        for x in range(2010, 2019):
-            print("Pass rate for {0} in year {1}: {2:.1%}".format(province, x, result_list[x-2010][2]))
+        return result_list
 
     def best_pass_rate_in_year(self, year=None, sex=None):
         result_list = []
         result_list.extend(self.pass_rate(year=int(year), sex=sex))
 
         result_list.sort(key=lambda x: x[2], reverse=True)
+        return result_list
 
-        print("Province with the best pass rate in {0}: {1}".format(year, result_list[0][0]))
 
     def regression_provinces(self, sex=None):
         provinces_passrate_list = []
@@ -139,9 +156,7 @@ class Analyzer:
                 if x[y][2] > x[y+1][2]:
                     results_list.append([x[0][0], x[y][1], x[y+1][1]])
 
-        print("Provinces that noted a regression in consecutive years:")
-        for x in results_list:
-            print("{0}: {1} -> {2}".format(x[0], x[1], x[2]))
+        return results_list
 
     def provinces_comparison(self, province1, province2, sex=None):
         compare_list = []
@@ -158,9 +173,8 @@ class Analyzer:
             else:
                 result_list.append([compare_list[x][1], compare_list[x+1][0]])
 
-        print("Comparison of pass rate in provinces {0} and {1} over the years:".format(province1, province2))
-        for x in result_list:
-            print("{0} -> {1}".format(x[0], x[1]))
+        return result_list
+
 
 
 
